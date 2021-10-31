@@ -1,28 +1,30 @@
 app-id: com.notepadqq.Notepadqq
 default-branch: beta
+base: io.qt.qtwebengine.BaseApp
+base-version: '5.15-21.08'
 runtime: org.kde.Platform
-runtime-version: '5.12'
+runtime-version: '5.15-21.08'
 sdk: org.kde.Sdk
 command: notepadqq
 rename-icon: notepadqq
 rename-desktop-file: notepadqq.desktop
 rename-appdata-file: notepadqq.appdata.xml
 copy-icon: true
-desktop-file-name-suffix: ' (Beta)'
+desktop-file-name-prefix: '(Beta) '
 tags:
   - beta
 finish-args:
   # X11 + XShm access
   - --share=ipc
-  - --socket=x11
+  - --socket=fallback-x11
   # Wayland access
   - --socket=wayland
   # Filesystem access
   # for Open Folder
-  - --filesystem=host
+  - --filesystem=home
   # Network access
   # for "Collect and transmit anonymous statistics to improve Notepadqq" (optional)
-  - --share=network
+  #- --share=network
   # Dconf access
   # for QGnomePlatform module on Wayland
   - --filesystem=xdg-run/dconf
@@ -36,8 +38,63 @@ finish-args:
   # OpenGL access
   # for QtWebKit (stable release) or QtWebEngine (beta release)
   - --device=dri
+
+cleanup-commands:
+  # Cleanup after QtWebKit
+  - rm -rf /app/include
+  - rm -rf /app/lib/{cmake,mkspecs,pkgconfig}
+
 modules:
-  - notepadqq.yaml
+  - shared-modules/python2.7/python-2.7.json
+  - nodejs.yaml
+  - name: uchardet
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DBUILD_STATIC=OFF
+    sources:
+      - type: archive
+        url: https://www.freedesktop.org/software/uchardet/releases/uchardet-0.0.6.tar.xz
+        sha256: 8351328cdfbcb2432e63938721dd781eb8c11ebc56e3a89d0f84576b96002c61
+    post-install:
+      - install -p -D -m 0644 "../AUTHORS" -t "${FLATPAK_DEST}/share/doc/uchardet/";
+      - install -p -D -m 0644 "../COPYING" -t "${FLATPAK_DEST}/share/licenses/uchardet/";
+    cleanup:
+      - /bin
+
+  - fonts.yaml
+
+  - name: notepadqq
+    buildsystem: qmake
+    config-opts:
+      - QMAKE_STRIP=
+      - INCLUDEPATH+=/app/include/QtWebEngine /app/include/QtWebEngineWidgets
+      - DEFINES+=USE_DBUS
+      - LRELEASE=lrelease
+    build-options:
+      env:
+        QMAKEPATH: "/app/lib"
+    sources:
+      - type: git
+        url: https://github.com/notepadqq/notepadqq.git
+        commit: 857a0369df590effc999a2fe6a6274321eeafaca
+      # Auto-fill paths for node & npm
+      - type: patch
+        path: notepadqq-1.9.99-paths.patch
+      # Disable editing nodejs options in Preferences
+      - type: patch
+        path: notepadqq-1.4.8-preferences.patch
+      # Improve icon handling
+      # https://github.com/notepadqq/notepadqq/pull/908
+      - type: patch
+        path: notepadqq-1.9.99-icons-xdg.patch
+        use-git: true
+    post-install:
+      - install -p -D -m 0644 *.md -t "${FLATPAK_DEST}/share/doc/notepadqq/"
+      - install -p -D -m 0644 "COPYING" -t "${FLATPAK_DEST}/share/licenses/notepadqq/"
+      - ln -s /app/bin/QtWebEngineProcess /app/lib/notepadqq/QtWebEngineProcess
+
 cleanup:
   - /include
   - /lib/pkgconfig
