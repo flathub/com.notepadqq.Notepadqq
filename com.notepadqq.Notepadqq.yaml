@@ -35,7 +35,8 @@ finish-args:
   # OpenGL access
   # for QtWebKit (stable release) or QtWebEngine (beta release)
   - --device=dri
-
+cleanup-commands:
+  - /app/cleanup-BaseApp.sh
 modules:
   - shared-modules/python2.7/python-2.7.json
   - nodejs.yaml
