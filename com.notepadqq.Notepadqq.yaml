@@ -89,3 +89,5 @@ modules:
 cleanup:
   - /include
   - /lib/pkgconfig
+  - /share/doc
+  - /share/man
