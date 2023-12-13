@@ -39,7 +39,7 @@ cleanup-commands:
   - /app/cleanup-BaseApp.sh
 modules:
   - shared-modules/python2.7/python-2.7.json
-  - nodejs.yaml
+
   - name: uchardet
     buildsystem: cmake-ninja
     builddir: true
@@ -55,8 +55,6 @@ modules:
       - install -p -D -m 0644 "../COPYING" -t "${FLATPAK_DEST}/share/licenses/uchardet/";
     cleanup:
       - /bin
-
-  - fonts.yaml
 
   - name: notepadqq
     buildsystem: qmake
