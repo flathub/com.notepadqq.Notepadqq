@@ -36,11 +36,6 @@ finish-args:
   # for QtWebKit (stable release) or QtWebEngine (beta release)
   - --device=dri
 
-cleanup-commands:
-  # Cleanup after QtWebKit
-  - rm -rf /app/include
-  - rm -rf /app/lib/{cmake,mkspecs,pkgconfig}
-
 modules:
   - shared-modules/python2.7/python-2.7.json
   - nodejs.yaml
