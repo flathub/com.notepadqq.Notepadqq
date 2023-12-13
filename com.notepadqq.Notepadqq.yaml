@@ -1,5 +1,4 @@
 app-id: com.notepadqq.Notepadqq
-default-branch: beta
 base: io.qt.qtwebengine.BaseApp
 base-version: '5.15-21.08'
 runtime: org.kde.Platform
