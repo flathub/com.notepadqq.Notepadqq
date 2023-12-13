@@ -21,12 +21,6 @@ finish-args:
   # Network access
   # for "Collect and transmit anonymous statistics to improve Notepadqq" (optional)
   #- --share=network
-  # Dconf access
-  # for QGnomePlatform module on Wayland
-  - --filesystem=xdg-run/dconf
-  - --filesystem=~/.config/dconf:ro
-  - --talk-name=ca.desrt.dconf
-  - --env=DCONF_USER_CONFIG_DIR=.config/dconf
   # Host command access
   # for flatpak-spawn
   # Allow to run commands from the host
