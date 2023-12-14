@@ -1,8 +1,8 @@
 app-id: com.notepadqq.Notepadqq
 base: io.qt.qtwebkit.BaseApp
-base-version: '5.15-21.08'
+base-version: '5.15-23.08'
 runtime: org.kde.Platform
-runtime-version: '5.15-21.08'
+runtime-version: '5.15-23.08'
 sdk: org.kde.Sdk
 command: notepadqq
 rename-icon: notepadqq
@@ -18,9 +18,6 @@ finish-args:
   # Filesystem access
   # for Open Folder
   - --filesystem=home
-  # Network access
-  # for "Collect and transmit anonymous statistics to improve Notepadqq" (optional)
-  #- --share=network
   # Host command access
   # for flatpak-spawn
   # Allow to run commands from the host
@@ -36,8 +33,6 @@ cleanup-commands:
 
 modules:
   - shared-modules/python2.7/python-2.7.json
-  - nodejs.yaml
-  - fonts.yaml
 
   - name: notepadqq
     buildsystem: qmake
@@ -53,7 +48,6 @@ modules:
       - type: archive
         url: https://github.com/notepadqq/notepadqq/archive/v1.4.8.tar.gz
         sha256: 13fba9abd84c59de27fbe92f74e2763b57588fcf9c88af10ec67313b0abbc9d0
-        git-init: true
       # Fix XDG files
       - type: patch
         path: notepadqq-1.4.8-xdg.patch
@@ -63,15 +57,11 @@ modules:
       # Disable editing nodejs options in Preferences
       - type: patch
         path: notepadqq-1.4.8-preferences.patch
-      # New icon theme
-      # https://github.com/notepadqq/notepadqq/commit/75c7ae9c07f455d87331bd676a972fd48d7e2f8d
-      # https://github.com/notepadqq/notepadqq/commit/62100842ca97aa91124c3d1b59f5bc325d0c53e9#diff-c3ab66d3a2ec15b26e2179019f6ee2b4
-      # https://github.com/notepadqq/notepadqq/commit/177d9fe942059947415295340963c02ae51c48ff
-      # https://github.com/notepadqq/notepadqq/pull/774
     post-install:
-      - install -p -D -m 0644 *.md -t "${FLATPAK_DEST}/share/doc/notepadqq/"
       - install -p -D -m 0644 "COPYING" -t "${FLATPAK_DEST}/share/licenses/notepadqq/"
 
 cleanup:
   - /include
   - /lib/pkgconfig
+  - /share/doc
+  - /share/man
