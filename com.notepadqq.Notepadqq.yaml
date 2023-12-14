@@ -1,9 +1,8 @@
 app-id: com.notepadqq.Notepadqq
-default-branch: beta
 base: io.qt.qtwebengine.BaseApp
-base-version: '5.15-21.08'
+base-version: '5.15-23.08'
 runtime: org.kde.Platform
-runtime-version: '5.15-21.08'
+runtime-version: '5.15-23.08'
 sdk: org.kde.Sdk
 command: notepadqq
 rename-icon: notepadqq
@@ -11,8 +10,6 @@ rename-desktop-file: notepadqq.desktop
 rename-appdata-file: notepadqq.appdata.xml
 copy-icon: true
 desktop-file-name-prefix: '(Beta) '
-tags:
-  - beta
 finish-args:
   # X11 + XShm access
   - --share=ipc
@@ -22,15 +19,6 @@ finish-args:
   # Filesystem access
   # for Open Folder
   - --filesystem=home
-  # Network access
-  # for "Collect and transmit anonymous statistics to improve Notepadqq" (optional)
-  #- --share=network
-  # Dconf access
-  # for QGnomePlatform module on Wayland
-  - --filesystem=xdg-run/dconf
-  - --filesystem=~/.config/dconf:ro
-  - --talk-name=ca.desrt.dconf
-  - --env=DCONF_USER_CONFIG_DIR=.config/dconf
   # Host command access
   # for flatpak-spawn
   # Allow to run commands from the host
@@ -38,15 +26,11 @@ finish-args:
   # OpenGL access
   # for QtWebKit (stable release) or QtWebEngine (beta release)
   - --device=dri
-
 cleanup-commands:
-  # Cleanup after QtWebKit
-  - rm -rf /app/include
-  - rm -rf /app/lib/{cmake,mkspecs,pkgconfig}
-
+  - /app/cleanup-BaseApp.sh
 modules:
   - shared-modules/python2.7/python-2.7.json
-  - nodejs.yaml
+
   - name: uchardet
     buildsystem: cmake-ninja
     builddir: true
@@ -62,8 +46,6 @@ modules:
       - install -p -D -m 0644 "../COPYING" -t "${FLATPAK_DEST}/share/licenses/uchardet/";
     cleanup:
       - /bin
-
-  - fonts.yaml
 
   - name: notepadqq
     buildsystem: qmake
@@ -98,3 +80,5 @@ modules:
 cleanup:
   - /include
   - /lib/pkgconfig
+  - /share/doc
+  - /share/man
