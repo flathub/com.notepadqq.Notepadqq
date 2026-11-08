@@ -1,14 +1,12 @@
 app-id: com.notepadqq.Notepadqq
-base: io.qt.qtwebkit.BaseApp
-base-version: '5.15-23.08'
 runtime: org.kde.Platform
-runtime-version: '5.15-23.08'
+runtime-version: '6.11'
+base: io.qt.qtwebengine.BaseApp
+base-version: '6.11'
 sdk: org.kde.Sdk
 command: notepadqq
 rename-icon: notepadqq
 rename-desktop-file: notepadqq.desktop
-rename-appdata-file: notepadqq.appdata.xml
-copy-icon: true
 finish-args:
   # X11 + XShm access
   - --share=ipc
@@ -25,43 +23,42 @@ finish-args:
   # OpenGL access
   # for QtWebKit (stable release) or QtWebEngine (beta release)
   - --device=dri
+  - --env=QTWEBENGINEPROCESS_PATH=/app/bin/QtWebEngineProcess
+cleanup:
+  - /share/man
 
 cleanup-commands:
-  # Cleanup after QtWebKit
-  - rm -rf /app/include
-  - rm -rf /app/lib/{cmake,mkspecs,pkgconfig}
+  - /app/cleanup-BaseApp.sh
 
 modules:
-  - shared-modules/python2.7/python-2.7.json
-
-  - name: notepadqq
-    buildsystem: qmake
+  # Required by: notepadqq
+  - name: uchardet
+    buildsystem: cmake-ninja
     config-opts:
-      - QMAKE_STRIP=
-      - INCLUDEPATH+="${FLATPAK_DEST}/include/QtWebKitWidgets ${FLATPAK_DEST}/include/QtWebKit"
-      - DEFINES+=USE_DBUS
-      - LRELEASE=lrelease
-    build-options:
-      env:
-        QMAKEPATH: "/app/lib"
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DBUILD_STATIC=0
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+    cleanup:
+      - /bin
     sources:
       - type: archive
-        url: https://github.com/notepadqq/notepadqq/archive/v1.4.8.tar.gz
-        sha256: 13fba9abd84c59de27fbe92f74e2763b57588fcf9c88af10ec67313b0abbc9d0
-      # Fix XDG files
-      - type: patch
-        path: notepadqq-1.4.8-xdg.patch
-      # Auto-fill paths for node & npm
-      - type: patch
-        path: notepadqq-1.4.8-paths.patch
-      # Disable editing nodejs options in Preferences
-      - type: patch
-        path: notepadqq-1.4.8-preferences.patch
-    post-install:
-      - install -p -D -m 0644 "COPYING" -t "${FLATPAK_DEST}/share/licenses/notepadqq/"
+        url: https://www.freedesktop.org/software/uchardet/releases/uchardet-0.0.8.tar.xz
+        sha256: e97a60cfc00a1c147a674b097bb1422abd9fa78a2d9ce3f3fdcc2e78a34ac5f0
+        x-checker-data:
+          type: anitya
+          project-id: 9265
+          stable-only: true
+          url-template: https://www.freedesktop.org/software/uchardet/releases/uchardet-$version.tar.xz
 
-cleanup:
-  - /include
-  - /lib/pkgconfig
-  - /share/doc
-  - /share/man
+  - name: notepadqq
+    buildsystem: cmake-ninja
+    sources:
+      - type: archive
+        url: https://github.com/notepadqq/notepadqq/archive/refs/tags/v2.1.0.tar.gz
+        sha256: 7c06b077f19d2937bbc40b46ddb0a32611b7314078381a8aed989471061bc3e1
+        x-checker-data:
+          is-main-source: true
+          type: anitya
+          project-id: 12071
+          stable-only: true
+          url-template: https://github.com/notepadqq/notepadqq/archive/refs/tags/v$version.tar.gz
