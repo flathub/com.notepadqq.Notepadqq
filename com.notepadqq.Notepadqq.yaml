@@ -62,3 +62,5 @@ modules:
           project-id: 12071
           stable-only: true
           url-template: https://github.com/notepadqq/notepadqq/archive/refs/tags/v$version.tar.gz
+      - type: patch
+        path: fix-appdata.patch

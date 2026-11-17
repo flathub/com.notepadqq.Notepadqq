@@ -1,0 +1,40 @@
+From 25cc70e61a14c4b611eac4c63a38d1ea8ffe5d25 Mon Sep 17 00:00:00 2001
+From: Sabri Ünal <yakushabb@gmail.com>
+Date: Tue, 17 Nov 2026 19:27:12 +0300
+Subject: [PATCH] Fix appdata paper cuts
+
+---
+ support_files/com.notepadqq.Notepadqq.metainfo.xml | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/support_files/com.notepadqq.Notepadqq.metainfo.xml b/support_files/com.notepadqq.Notepadqq.metainfo.xml
+index 1e2f750..3e2b199 100644
+--- a/support_files/com.notepadqq.Notepadqq.metainfo.xml
++++ b/support_files/com.notepadqq.Notepadqq.metainfo.xml
+@@ -6,20 +6,22 @@
+   <name>Notepadqq</name>
+   <summary>An advanced text editor</summary>
+   <description>
++    <p>**WARNING: It has been reported that with the most recent OS/Qt versions, the program can crash unexpectedly. Use this at your own risk.**</p>
+     <p>Notepadqq is an advanced text editor designed to make life easier for developers.</p>
+     <p>It includes real-time syntax highlighting for over one hundred languages, regular expression searches, and text manipulation with multiple cursors.</p>
+   </description>
+   <launchable type="desktop-id">notepadqq.desktop</launchable>
+   <screenshots>
+     <screenshot type="default">
+-      <image>https://notepadqq.com/s/images/snapshot1.png</image>
++      <image>https://imgproxy.flathub.org/insecure/dpr:1/f:avif/rs:fit:1024:625/aHR0cHM6Ly9kbC5mbGF0aHViLm9yZy9tZWRpYS9jb20vbm90ZXBhZHFxL05vdGVwYWRxcS8xYzk3NzAyMDY5YjMxMGI1N2ZjNjkyN2E4NzE0MTk1Yi9zY3JlZW5zaG90cy9pbWFnZS0xX29yaWcucG5n</image>
+     </screenshot>
+   </screenshots>
+   <developer id="com.notepadqq">
+     <name>The Notepadqq Team</name>
+   </developer>
+   <url type="homepage">https://notepadqq.com</url>
+   <url type="bugtracker">https://github.com/notepadqq/notepadqq/issues</url>
++  <url type="vcs-browser">https://github.com/notepadqq/notepadqq</url>
+   <url type="faq">https://notepadqq.com/wp/faq</url>
+   <url type="help">https://github.com/notepadqq/notepadqq/wiki</url>
+   <url type="translate">https://github.com/notepadqq/notepadqq/wiki/Translate-Notepadqq</url>
+--
+libgit2 1.9.7
+
