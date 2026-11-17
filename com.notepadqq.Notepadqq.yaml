@@ -54,8 +54,8 @@ modules:
     buildsystem: cmake-ninja
     sources:
       - type: archive
-        url: https://github.com/notepadqq/notepadqq/archive/refs/tags/v2.1.0.tar.gz
-        sha256: 7c06b077f19d2937bbc40b46ddb0a32611b7314078381a8aed989471061bc3e1
+        url: https://github.com/notepadqq/notepadqq/archive/refs/tags/v2.1.1.tar.gz
+        sha256: f448ddef3f2c8e076f54e213cd4cbd3137979262878f8af15ce52d47d23b21ee
         x-checker-data:
           is-main-source: true
           type: anitya
